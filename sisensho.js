@@ -125,10 +125,13 @@ function createBoard() {
         for (let c = 0; c < COLS; c++) {
             const div = document.createElement("div");
             div.className = "cell";
-            div.style.backgroundImage = `url("./ma-jong-pais/${board[r][c]}.png")`;
             div.dataset.r = r;
             div.dataset.c = c;
-
+            if (board[r][c] != null) {
+                div.style.backgroundImage = `url("./ma-jong-pais/${board[r][c]}.png")`;
+            } else {
+                div.style.border = "none";
+            }
             div.onclick = () => handleClick(r, c);
             el.appendChild(div);
             cells[r][c] = div;
@@ -152,12 +155,12 @@ function hideTile(r, c) {
     selected = null;
 }
 
-function selectTitle(r, c) {
+function selectTile(r, c) {
     cells[r][c].classList.add("selected");
     selected = {r, c};
 }
 
-function deselectTitle(r, c) {
+function deselectTile(r, c) {
     cells[r][c].classList.remove("selected");
     selected = null;
 }
@@ -173,7 +176,7 @@ function handleClick(r, c) {
 
     // ひとつ選んでいて、次のクリックがそれ自身だったら選択解除
     if (selected && selected.r === r && selected.c === c) {
-        deselectTitle(r, c);
+        deselectTile(r, c);
         playSE(seClick);
     }
     
@@ -186,21 +189,20 @@ function handleClick(r, c) {
                 hideTile(r, c);
                 addScore();
                 playSE(seMatch);
-
             } else { // 同じ牌だが繋げられない場合
-                deselectTitle(r, c);
+                deselectTile(selected.r, selected.c);
                 subtract500();
                 playSE(seError);
             }
         } else { // 違う牌を選んでしまった場合
-            deselectTitle(r, c);
+            deselectTile(selected.r, selected.c);
             subtract500();
             playSE(seError);
         }
 
     // 何も選んでいない状態で選択したとき
     } else {
-        selectTitle(r, c);
+        selectTile(r, c);
         playSE(seClick);
     }
 }
@@ -256,6 +258,7 @@ function isDeadLock() {
 
 }
 
+document.querySelector(".controls button").addEventListener("click", function() {resetGame()});
 document.querySelector(".controls button").addEventListener("click", function() {playSE(seMatch)});
 
 shuffleTiles();
