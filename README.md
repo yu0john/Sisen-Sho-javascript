@@ -3,7 +3,7 @@
 - 有志による非公式の制作です。
 - 原作者や権利者の申し立て等、何かあればこのリポジトリは直ちに削除します。
 
-プレイ可能なページを[公開しています](https://github.com/yu0john/Sisen-Sho-javascript)。ぜひ遊んでみてください。
+プレイ可能なページを[公開しています](https://yu0john.github.io/Sisen-Sho-javascript/)。ぜひ遊んでみてください。
 
 
 ## 使用した素材
