@@ -183,6 +183,7 @@ function handleClick(r, c) {
                 hideTile(r, c);
                 addScore();
                 playSE(seMatch);
+
             } else { // 同じ牌だが繋げられない場合
                 deselectTile(selected.r, selected.c);
                 subtract500();
@@ -247,9 +248,44 @@ function checkLine(r1, c1, r2, c2, turns) {
 }
 
 // 手詰まり判定
+let isDeadLocked = false;
+let tileTypes = 34;
 // true -> 消せる組み合わせが残っていない
 function isDeadLock() {
+    const map = new Map();
 
+    for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+            if (board[r][c] == null) continue;
+            let tileId = board[r][c];
+            if (!map.has(tileId)) {
+                map.set(tileId, [{r, c}]);
+            } else {
+                map.get(tileId).push({r, c});
+            }
+        }
+    }
+
+    for (let content of map) {
+        let key = content[0];
+        for (let i = 0; i < map.get(key).length; i++) {
+            for (let j = i + 1; j < map.get(key).length; j++) {
+                let r1 = map.get(key)[i].r;
+                let c1 = map.get(key)[i].c;
+                let r2 = map.get(key)[j].r;
+                let c2 = map.get(key)[j].c;
+
+                console.log(`Checking tileID:${key}, point(${r1}, ${c1}) and point(${r2}, ${c2})`);
+                if (canConnect(r1, c1, r2, c2)) {
+                    console.log("at least one more pair can be deleted.");
+                    return false;
+                }
+            }
+        }
+    }
+    
+    console.log("no more pairs to be deleted");
+    return true;
 }
 
 function startGame() {
