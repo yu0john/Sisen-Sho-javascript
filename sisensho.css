@@ -47,8 +47,7 @@ body {
 }
 
 .cell.selected {
-    /* opacity: 0.5; */
-    border: 5px solid red;
+    opacity: 0.5;
 }
 
 .controls {
