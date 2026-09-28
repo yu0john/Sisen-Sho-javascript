@@ -110,14 +110,8 @@ function shuffleTiles() {
     }
 }
 
-function startGame() {
-    startTimer();
-    score = 0;
-    streak = 0;
-    updateScoreDisplay();
-}
-
-function createBoard() {
+// HTML用の配列を用意する
+function createHtmlBoard() {
     const el = document.getElementById("board");
     cells = Array.from({ length: ROWS }, () => []);
 
@@ -143,12 +137,12 @@ function hideTile(r, c) {
     cells[r][c].classList.add("empty");
     cells[r][c].classList.remove("selected");
     cells[r][c].style.backgroundImage = `none`;
-    cells[r][c] = null;
+    // cells[r][c] = null;
     
     cells[selected.r][selected.c].classList.add("empty");
     cells[selected.r][selected.c].classList.remove("selected");
     cells[selected.r][selected.c].style.backgroundImage = `none`;
-    cells[selected.r][selected.c] = null;
+    // cells[selected.r][selected.c] = null;
 
     board[r][c] = null;
     board[selected.r][selected.c] = null;
@@ -258,9 +252,32 @@ function isDeadLock() {
 
 }
 
+function startGame() {
+    startTimer();
+    score = 0;
+    streak = 0;
+    updateScoreDisplay();
+}
+
+function resetGame() {
+    shuffleTiles();
+
+    // CSSをもとに戻してcellsに再度格納
+    for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+            cells[r][c].classList.remove("selected");
+            cells[r][c].classList.remove("empty");
+            cells[r][c].style.backgroundImage = `url("./ma-jong-pais/${board[r][c]}.png")`
+        }
+    }
+
+    selected = null;
+    startGame();
+}
+
 document.querySelector(".controls button").addEventListener("click", function() {resetGame()});
 document.querySelector(".controls button").addEventListener("click", function() {playSE(seMatch)});
 
 shuffleTiles();
-createBoard();
+createHtmlBoard();
 startGame();
