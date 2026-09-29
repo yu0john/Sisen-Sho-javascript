@@ -40,6 +40,10 @@ function updateTimerDisplay() {
     timerDisplay.textContent = `残り時間: ${timeLeft}秒`;
 }
 
+function stopTimer() {
+    clearInterval(timerId);
+}
+
 function timeOver() {
     isScoreLocked = true;
     playSE(seFinish);
@@ -47,7 +51,7 @@ function timeOver() {
 
     setTimeout(() => {
         timeUpModal.classList.toggle("active")
-    }, 1500);
+    }, 1000);
 }
 
 // 得点関係
@@ -65,12 +69,14 @@ function calcBonus(streak) {
 }
 
 function addScore() {
+    if (isScoreLocked) return; 
     streak++;
     score += calcBonus(streak);
     updateScoreDisplay();
 }
 
 function subtract500() {
+    if (isScoreLocked) return;
     score = Math.max(0, score - 500); 
     streak = 0;
     updateScoreDisplay();
@@ -187,6 +193,7 @@ function handleClick(r, c) {
                 playSE(seMatch);
                 if (isDeadLock()) {
                     enableDeadLockModal();
+                    stopTimer();
                     isScoreLocked = true;
                 }
             } else { // 同じ牌だが繋げられない場合
@@ -277,16 +284,16 @@ function isDeadLock() {
                 let r2 = map.get(key)[j].r;
                 let c2 = map.get(key)[j].c;
 
-                console.log(`Checking tileID:${key}, point(${r1}, ${c1}) and point(${r2}, ${c2})`);
+                // console.log(`Checking tileID:${key}, point(${r1}, ${c1}) and point(${r2}, ${c2})`);
                 if (canConnect(r1, c1, r2, c2)) {
-                    console.log("at least one more pair can be deleted.");
+                    // console.log("at least one more pair can be deleted.");
                     return false;
                 }
             }
         }
     }
     
-    console.log("no more pairs to be deleted");
+    // console.log("no more pairs to be deleted");
     return true;
 }
 
