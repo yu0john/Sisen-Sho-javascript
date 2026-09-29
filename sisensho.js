@@ -216,17 +216,15 @@ function canConnect(r1, c1, r2, c2) {
 // 検証ロジック
 // r1 が選択した牌、r2が目標の牌
 function checkLine(r1, c1, r2, c2, turns) {
-    if (turns > 2) return false; // ターンを3回で検出したら終わり
+    if (turns > 2) return false; // 曲がった数が3回だと終わり
 
     // 4方向へ移動ベクトルを作る。それぞれ列と行
-    //
     const dr = [0, 0, 1, -1];
     const dc = [1, -1, 0, 0];
 
     // ループで4方向それぞれ移動させてみる
     for (let i = 0; i < 4; i++) {
         // 次に調べるマスの座標を暫定させる
-        // dr[2],dr[3]でROW方向に+1した場合、-1した場合といった具合
         let nr = r1 + dr[i];
         let nc = c1 + dc[i];
 
@@ -236,7 +234,7 @@ function checkLine(r1, c1, r2, c2, turns) {
             if (nr === r2 && nc === c2) return true;
 
             // 途中で別の牌にぶつかったら次のループへ
-            if (board[nr][nc]) break;
+            if (board[nr][nc] != null) break;
 
             // もう一度checkLine()を呼び出し移動を開始させる。
             // 空きマスなら、そこから更に曲がって目標に到達するか試す。
