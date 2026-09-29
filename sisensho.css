@@ -1,6 +1,6 @@
 :root {
     /* 縦もしくは横の小さい方を基準としてセルのサイズを決定する */
-    --cell-size: min(calc(95vw / 17), calc(90vh / 10));
+    --cell-size: min(calc(95vw / 17), calc(95vh / 10 / 1.2));
 }
 
 body {
@@ -36,7 +36,7 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     box-sizing: border-box;
-    border: 2px solid #aaa;
+    border: 1px solid #aaa;
     display: flex;
 }
 
@@ -88,6 +88,36 @@ body {
 }
 
 #time-up-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+#deadlock-modal {
+    width: 60%;
+    height: 60%;
+    background: #008888aa;
+    position: absolute;
+    z-index: 2;
+    margin: auto;
+    padding: 0;
+    left: 20%;
+    top: 20%;
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+    text-align: center;
+}
+
+#deadlock-modal p {
+    align-content: center;
+    margin: auto;
+    font-size: 3em;
+    background: #ccc;
+    color: #222;
+    padding: 0.5rem;
+}
+
+#deadlock-modal.active {
     opacity: 1;
     visibility: visible;
 }

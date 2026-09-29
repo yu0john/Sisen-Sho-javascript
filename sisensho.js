@@ -41,6 +41,7 @@ function updateTimerDisplay() {
 }
 
 function timeOver() {
+    isScoreLocked = true;
     playSE(seFinish);
     timeUpModal.classList.toggle("active")
 
@@ -52,6 +53,7 @@ function timeOver() {
 // 得点関係
 let score = 0;
 let streak = 0;
+let isScoreLocked = false;
 const scoreDisplay = document.getElementById("score-display");
 
 function updateScoreDisplay() {
@@ -183,7 +185,10 @@ function handleClick(r, c) {
                 hideTile(r, c);
                 addScore();
                 playSE(seMatch);
-
+                if (isDeadLock()) {
+                    enableDeadLockModal();
+                    isScoreLocked = true;
+                }
             } else { // 同じ牌だが繋げられない場合
                 deselectTile(selected.r, selected.c);
                 subtract500();
@@ -248,12 +253,11 @@ function checkLine(r1, c1, r2, c2, turns) {
 }
 
 // 手詰まり判定
-let isDeadLocked = false;
-let tileTypes = 34;
 // true -> 消せる組み合わせが残っていない
 function isDeadLock() {
     const map = new Map();
-
+    
+    // 残っている牌の種類とそれらの
     for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
             if (board[r][c] == null) continue;
@@ -288,6 +292,15 @@ function isDeadLock() {
     return true;
 }
 
+const deadlockModal = document.getElementById("deadlock-modal");
+function enableDeadLockModal() {
+    deadlockModal.classList.add("active");
+}
+
+function disableDeadLockModal() {
+    deadlockModal.classList.remove("active");
+}
+
 function startGame() {
     startTimer();
     score = 0;
@@ -308,6 +321,8 @@ function resetGame() {
     }
 
     selected = null;
+    disableDeadLockModal();
+    isScoreLocked = false;
     startGame();
 }
 
